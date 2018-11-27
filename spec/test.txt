@@ -1,0 +1,59 @@
+Matching Maps
+Maps are data types structured in key/value pairs. They are used to represent a set of
+values with labels that need to stay together. For example, if we want to represent a
+user signup, we can use a map to store the fields and their values in memory, like this:
+iex>​ user_signup = %{​ email:​ ​ " ​ johndoe@mail.com"​ , ​ password:​ ​ " ​ 12345678"​ }
+The %{} is the syntax to create map values. email: is the key and expands to an atom.
+"johndoe@mail.com" is the value of the key :email . The equivalent alternative syntax
+uses => :
+iex>​ user_signup = %{​ :email​ => ​ " ​ johndoe@mail.com"​ , ​ :password​ =>
+" ​ 1234567"​ }It’s little bit verbose, but this syntax is useful for storing any value in a key. For
+example,
+iex>​ sales = %{​ " ​ 2017/01"​ => 2000, ​ " ​ 2017/02"​ => 2500}
+We can also represent complex nested structures:
+%{
+name:​ ​ " ​ John Doe"​ ,
+age:​ 20,
+programming_languages:​ [​ " ​ Ruby"​ , ​ " ​ Elixir"​ , ​ " ​ JavaScript"​ , ​ " ​ Java"​ ],
+location:​ %{​ city:​ ​ " ​ São Paulo"​ , ​ country:​ ​ " ​ Brazil"​ , ​ state:​ ​ " ​ SP"​ }
+}
+We can check values and keys of maps by using pattern matching. Try the following
+example in your IEx:
+iex>​ abilities = %{​ strength:​ 16, d ​ exterity:​ 12, ​ intelligence:​ 10}
+iex>​ %{​ strength:​ strength_value} = abilities
+iex>​ strength_value
+16
+In this example, we’re accessing the key :strength and binding its value to the variable
+strength_value . The pattern-matching expression always checks a subset of the map,
+which means we don’t need to provide all the keys for a match to be successful. We
+can use only the keys that we need. If the map doesn’t have the key, a MatchError will
+arise. Check it out:
+iex>​ %{​ wisdom:​ wisdom_value} = abilities
+**​ (MatchError) no match of right hand side value...
+If we use an empty map, it will match all maps. For example,
+iex>​ %{} = abilities
+%{dexterity: 12, intelligence: 10, strength: 16}
+iex>​ %{} = %{​ a:​ 1, ​ b:​ 2}
+%{a: 1, b: 2}
+We can use pattern-matching expressions to extract and check values at the same time.
+Let’s demonstrate this by creating an expression using the same variable, abilities ,
+from the previous example. Try this new pattern in your IEx:
+iex>​ %{​ intelligence:​ 10, ​ dexterity:​ dexterity_value} = abilities
+iex>​ dexterity_value
+12We’re telling Elixir that the abilities variable must have an :intelligence key with the
+number 10 . At the same time, we’re telling Elixir to check if the :dexterity key exists
+and, if so, to extract its value to a variable.
+We can use the = operator on the left side of the pattern-matching expression to check
+and bind at the same time. Try it:
+iex>​ %{​ strength:​ strength_value = 16 } = abilities
+iex>​ strength_value
+16
+To understand it, look at strength_value = 16 in isolation. The expression binds the 16
+value to the strength_value variable. Knowing that strength_value is 16 , it will try to
+match against the abilities structure. The abilities structure has the key and value
+strength: 16 . It matches! We could do the same thing in two steps:
+iex>​ strength_value = 16
+iex>​ %{​ strength:​ ˆstrength_value} = abilities
+Here we used the pin operator to match abilities using the value of the strength_value
+variable. Use the one-step version for simple assignments, and use the two-step
+version when you have some calculation or functi
